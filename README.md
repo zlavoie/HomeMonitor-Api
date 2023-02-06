@@ -5,7 +5,7 @@ Use modern technologies to experiment with architectures, design patterns, and d
 
 ## Stack
 * .Net 7 API 
-* React Web App
+* Vue Web App
 
 ### Other
 * Kubernetes for container orchestration
