@@ -23,6 +23,7 @@ const logoUrl = computed(() => {
 
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
+    router.push('/auth/login');
 };
 const onSettingsClick = () => {
     topbarMenuActive.value = false;

@@ -24,6 +24,12 @@ const model = ref([
             { label: 'Pricing', icon: 'pi pi-money-bill', to: '/uikit/formlayout' },
         ]
     },
+    {
+        label: 'Household Members',
+        items: [
+            { label: 'Pets', icon: 'pi pi-heart-fill', to: '/uikit/formlayout' }
+        ]
+    },
     // {
     //     label: 'UI Components',
     //     items: [
