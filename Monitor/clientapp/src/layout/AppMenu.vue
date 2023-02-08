@@ -13,7 +13,7 @@ const model = ref([
     {
         label: 'Maintain',
         items: [
-            { label: 'Reminders', icon: 'pi pi-clock', to: '/uikit/formlayout' },
+            { label: 'Reminders', icon: 'pi pi-clock', to: '/pages/Reminders' },
             { label: 'Calendar', icon: 'pi pi-calendar', to: '/uikit/formlayout' },
         ]
     },
