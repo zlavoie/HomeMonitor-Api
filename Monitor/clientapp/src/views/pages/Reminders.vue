@@ -1,111 +1,147 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import CountryService from '@/service/CountryService';
-import NodeService from '@/service/NodeService';
 
-const floatValue = ref(null);
-const autoValue = ref(null);
-const selectedAutoValue = ref(null);
-const autoFilteredValue = ref([]);
-const calendarValue = ref(null);
-const inputNumberValue = ref(null);
-const chipsValue = ref(null);
-const treeSelectNodes = ref(null);
-const countryService = new CountryService();
-const nodeService = new NodeService();
 const selectedMonths = ref([
-    { name: '1 month', code: 1},
-    { name: '2 months', code: 2},
-    { name: '3 months', code: 3},
-    { name: '4 months', code: 4},
-    { name: '5 months', code: 5},
-    { name: '6 months', code: 6},
-    { name: '7 months', code: 7},
-    { name: '8 months', code: 8},
-    { name: '8 months', code: 9},
-    { name: '10 months', code: 10},
-    { name: '11 months', code: 11},
-    { name: '12 months', code: 12},
+    { name: 'Every 1 month', code: 1},
+    { name: 'Every 2 months', code: 2},
+    { name: 'Every 3 months', code: 3},
+    { name: 'Every 4 months', code: 4},
+    { name: 'Every 5 months', code: 5},
+    { name: 'Every 6 months', code: 6},
+    { name: 'Every 7 months', code: 7},
+    { name: 'Every 8 months', code: 8},
+    { name: 'Every 8 months', code: 9},
+    { name: 'Every 10 months', code: 10},
+    { name: 'Every 11 months', code: 11},
+    { name: 'Every 12 months', code: 12},
 ]);
 const selectedMonth = ref(null);
+const lastServicedDate = ref(null);
+const nameForReminder = ref(null);
+const upcCode = ref(null);
 
-onMounted(() => {
-    countryService.getCountries().then((data) => (autoValue.value = data));
-    nodeService.getTreeNodes().then((data) => (treeSelectNodes.value = data));
-});
-
-const searchCountry = (event) => {
-    setTimeout(() => {
-        if (!event.query.trim().length) {
-            autoFilteredValue.value = [...autoValue.value];
-        } else {
-            autoFilteredValue.value = autoValue.value.filter((country) => {
-                return country.name.toLowerCase().startsWith(event.query.toLowerCase());
-            });
-        }
-    }, 250);
-};
 </script>
 <template>
     <div class="grid p-fluid">
         <div class="col-12">
-            <div class="card">
-                <h5>Create Reminder</h5>
-                <br>
-                <div class="grid formgrid">
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <span class="p-float-label">
-                            <Dropdown v-model="selectedMonth" :options="selectedMonths" optionLabel="name" optionValue="code" placeholder="Select Frequency in Months" />
-                            <label for="dropdown">Repeat reminder</label>
-                        </span>
+            <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+                <div class="card">
+                    <h3>Create Reminder</h3>
+                    <br>
+                    <div class="grid formgrid">
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <span class="p-float-label">
+                                <InputText id="reminderName" type="text" v-model="nameForReminder" />
+                                <label for="reminderName">Name for Reminder</label>
+                            </span>
+                        </div>
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <span class="p-float-label">
+                                <Dropdown v-model="selectedMonth" :options="selectedMonths" optionLabel="name" optionValue="code" placeholder="Frequncy in Months" />
+                                <label for="dropdown">Remind me</label>
+                            </span>
+                        </div>
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <span class="p-float-label">
+                                <Calendar id="lastService" v-model="lastServicedDate" inputId="icon" :showIcon="true" />
+                                <label for="lastService">Last Serviced On</label>
+                            </span>
+                        </div>
+                    </div>
+                    <Divider />
+                    <h5>Optional</h5>
+                    <p>You can link an item to the new reminder</p>
+                    <br>
+                    <div class="grid formgrid">
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <span class="p-float-label">
+                                <InputText id="upcCode" type="text" v-model="upcCode" />
+                                <label for="upcCode">UPC Code</label>
+                            </span>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="grid formgrid">
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <Button type="submit" label="Submit" class="mt-2" />
+                        </div>
                     </div>
                 </div>
-
-                <h5>Icons</h5>
-                <div class="grid formgrid">
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <span class="p-input-icon-left">
-                            <i class="pi pi-user" />
-                            <InputText type="text" placeholder="Username" />
-                        </span>
-                    </div>
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <span class="p-input-icon-right">
-                            <InputText type="text" placeholder="Search" />
-                            <i class="pi pi-search" />
-                        </span>
-                    </div>
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <span class="p-input-icon-left p-input-icon-right">
-                            <i class="pi pi-user" />
-                            <InputText type="text" placeholder="Search" />
-                            <i class="pi pi-search" />
-                        </span>
-                    </div>
-                </div>
-
-                <h5>Float Label</h5>
-                <span class="p-float-label">
-                    <InputText id="username" type="text" v-model="floatValue" />
-                    <label for="username">Username</label>
-                </span>
-
-                <h5>Textarea</h5>
-                <Textarea placeholder="Your Message" :autoResize="true" rows="3" cols="30" />
-
-                <h5>AutoComplete</h5>
-                <AutoComplete placeholder="Search" id="dd" :dropdown="true" :multiple="true" v-model="selectedAutoValue" :suggestions="autoFilteredValue" @complete="searchCountry($event)" field="name" />
-
-                <h5>Calendar</h5>
-                <Calendar :showIcon="true" :showButtonBar="true" v-model="calendarValue"></Calendar>
-
-                <h5>Spinner</h5>
-                <InputNumber v-model="inputNumberValue" showButtons mode="decimal"></InputNumber>
-
-                <h5>Chips</h5>
-                <Chips v-model="chipsValue" />
-            </div>
+            </form>
         </div>
-
     </div>
 </template>
+<script>
+import { email, required } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
+import CountryService from './service/CountryService';
+
+export default {
+    setup: () => ({ v$: useVuelidate() }),
+    data() {
+        return {
+            name: '',
+            email: '',
+            password: '',
+            date: null,
+            country: null,
+            accept: null,
+            submitted: false,
+            countries: null,
+            showMessage: false
+        }
+    },
+    countryService: null,
+    validations() {
+        return {
+            name: {
+                required
+            },
+            email: {
+                required,
+                email
+            },
+            password: {
+                required
+            },
+            accept: {
+                required
+            }
+        }
+    },
+    created() {
+        this.countryService = new CountryService();
+    },
+    mounted() {
+        this.countryService.getCountries().then(data => this.countries = data);
+    },
+    methods: {
+        handleSubmit(isFormValid) {
+            this.submitted = true;
+
+            if (!isFormValid) {
+                return;
+            }
+
+            this.toggleDialog();
+        },
+        toggleDialog() {
+            this.showMessage = !this.showMessage;
+        
+            if(!this.showMessage) {
+                this.resetForm();
+            }
+        },
+        resetForm() {
+            this.name = '';
+            this.email = '';
+            this.password = '';
+            this.date = null;
+            this.country = null;
+            this.accept = null;
+            this.submitted = false;
+        }
+    }
+}
+</script>
