@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import CountryService from '@/service/CountryService';
 
 const selectedMonths = ref([
     { name: 'Every 1 month', code: 1},
@@ -20,6 +19,7 @@ const selectedMonth = ref(null);
 const lastServicedDate = ref(null);
 const nameForReminder = ref(null);
 const upcCode = ref(null);
+
 
 </script>
 <template>
@@ -72,76 +72,3 @@ const upcCode = ref(null);
         </div>
     </div>
 </template>
-<script>
-import { email, required } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
-import CountryService from './service/CountryService';
-
-export default {
-    setup: () => ({ v$: useVuelidate() }),
-    data() {
-        return {
-            name: '',
-            email: '',
-            password: '',
-            date: null,
-            country: null,
-            accept: null,
-            submitted: false,
-            countries: null,
-            showMessage: false
-        }
-    },
-    countryService: null,
-    validations() {
-        return {
-            name: {
-                required
-            },
-            email: {
-                required,
-                email
-            },
-            password: {
-                required
-            },
-            accept: {
-                required
-            }
-        }
-    },
-    created() {
-        this.countryService = new CountryService();
-    },
-    mounted() {
-        this.countryService.getCountries().then(data => this.countries = data);
-    },
-    methods: {
-        handleSubmit(isFormValid) {
-            this.submitted = true;
-
-            if (!isFormValid) {
-                return;
-            }
-
-            this.toggleDialog();
-        },
-        toggleDialog() {
-            this.showMessage = !this.showMessage;
-        
-            if(!this.showMessage) {
-                this.resetForm();
-            }
-        },
-        resetForm() {
-            this.name = '';
-            this.email = '';
-            this.password = '';
-            this.date = null;
-            this.country = null;
-            this.accept = null;
-            this.submitted = false;
-        }
-    }
-}
-</script>
