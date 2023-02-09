@@ -10,53 +10,24 @@ const autoFilteredValue = ref([]);
 const calendarValue = ref(null);
 const inputNumberValue = ref(null);
 const chipsValue = ref(null);
-const sliderValue = ref(50);
-const ratingValue = ref(null);
-const colorValue = ref('#1976D2');
-const radioValue = ref(null);
-const checkboxValue = ref([]);
-const switchValue = ref(false);
-const listboxValues = ref([
-    { name: 'New York', code: 'NY' },
-    { name: 'Rome', code: 'RM' },
-    { name: 'London', code: 'LDN' },
-    { name: 'Istanbul', code: 'IST' },
-    { name: 'Paris', code: 'PRS' }
-]);
-const listboxValue = ref(null);
-const dropdownValues = ref([
-    { name: 'New York', code: 'NY' },
-    { name: 'Rome', code: 'RM' },
-    { name: 'London', code: 'LDN' },
-    { name: 'Istanbul', code: 'IST' },
-    { name: 'Paris', code: 'PRS' }
-]);
-const dropdownValue = ref(null);
-const multiselectValues = ref([
-    { name: 'Australia', code: 'AU' },
-    { name: 'Brazil', code: 'BR' },
-    { name: 'China', code: 'CN' },
-    { name: 'Egypt', code: 'EG' },
-    { name: 'France', code: 'FR' },
-    { name: 'Germany', code: 'DE' },
-    { name: 'India', code: 'IN' },
-    { name: 'Japan', code: 'JP' },
-    { name: 'Spain', code: 'ES' },
-    { name: 'United States', code: 'US' }
-]);
-
-const multiselectValue = ref(null);
-const toggleValue = ref(false);
-const selectButtonValue1 = ref(null);
-const selectButtonValues1 = ref([{ name: 'Option 1' }, { name: 'Option 2' }, { name: 'Option 3' }]);
-const selectButtonValue2 = ref(null);
-const selectButtonValues2 = ref([{ name: 'Option 1' }, { name: 'Option 2' }, { name: 'Option 3' }]);
-const knobValue = ref(50);
-const inputGroupValue = ref(false);
 const treeSelectNodes = ref(null);
-const selectedNode = ref(null);
 const countryService = new CountryService();
 const nodeService = new NodeService();
+const selectedMonths = ref([
+    { name: '1 month', code: 1},
+    { name: '2 months', code: 2},
+    { name: '3 months', code: 3},
+    { name: '4 months', code: 4},
+    { name: '5 months', code: 5},
+    { name: '6 months', code: 6},
+    { name: '7 months', code: 7},
+    { name: '8 months', code: 8},
+    { name: '8 months', code: 9},
+    { name: '10 months', code: 10},
+    { name: '11 months', code: 11},
+    { name: '12 months', code: 12},
+]);
+const selectedMonth = ref(null);
 
 onMounted(() => {
     countryService.getCountries().then((data) => (autoValue.value = data));
@@ -77,18 +48,16 @@ const searchCountry = (event) => {
 </script>
 <template>
     <div class="grid p-fluid">
-        <div class="col-12 md:col-6">
+        <div class="col-12">
             <div class="card">
                 <h5>Create Reminder</h5>
+                <br>
                 <div class="grid formgrid">
                     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <Calendar :showIcon="true" :showButtonBar="true" v-model="calendarValue"></Calendar>
-                    </div>
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <InputText type="text" placeholder="Disabled" :disabled="true"></InputText>
-                    </div>
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <InputText type="text" placeholder="Invalid" class="p-invalid" />
+                        <span class="p-float-label">
+                            <Dropdown v-model="selectedMonth" :options="selectedMonths" optionLabel="name" optionValue="code" placeholder="Select Frequency in Months" />
+                            <label for="dropdown">Repeat reminder</label>
+                        </span>
                     </div>
                 </div>
 
@@ -136,162 +105,7 @@ const searchCountry = (event) => {
                 <h5>Chips</h5>
                 <Chips v-model="chipsValue" />
             </div>
-
-            <div class="card">
-                <div class="grid">
-                    <div class="col-12">
-                        <h5>Slider</h5>
-                        <InputText v-model.number="sliderValue" />
-                        <Slider v-model="sliderValue" />
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <h5>Rating</h5>
-                        <Rating v-model="ratingValue" />
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <h5>ColorPicker</h5>
-                        <ColorPicker style="width: 2rem" v-model="colorValue" />
-                    </div>
-                    <div class="col-12">
-                        <h5>Knob</h5>
-                        <Knob v-model="knobValue" :step="10" :min="-50" :max="50" valueTemplate="{value}%" />
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <div class="col-12 md:col-6">
-            <div class="card">
-                <h5>RadioButton</h5>
-                <div class="grid">
-                    <div class="col-12 md:col-4">
-                        <div class="field-radiobutton mb-0">
-                            <RadioButton id="option1" name="option" value="Chicago" v-model="radioValue" />
-                            <label for="option1">Chicago</label>
-                        </div>
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <div class="field-radiobutton mb-0">
-                            <RadioButton id="option2" name="option" value="Los Angeles" v-model="radioValue" />
-                            <label for="option2">Los Angeles</label>
-                        </div>
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <div class="field-radiobutton mb-0">
-                            <RadioButton id="option3" name="option" value="New York" v-model="radioValue" />
-                            <label for="option3">New York</label>
-                        </div>
-                    </div>
-                </div>
-
-                <h5>Checkbox</h5>
-                <div class="grid">
-                    <div class="col-12 md:col-4">
-                        <div class="field-checkbox mb-0">
-                            <Checkbox id="checkOption1" name="option" value="Chicago" v-model="checkboxValue" />
-                            <label for="checkOption1">Chicago</label>
-                        </div>
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <div class="field-checkbox mb-0">
-                            <Checkbox id="checkOption2" name="option" value="Los Angeles" v-model="checkboxValue" />
-                            <label for="checkOption2">Los Angeles</label>
-                        </div>
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <div class="field-checkbox mb-0">
-                            <Checkbox id="checkOption3" name="option" value="New York" v-model="checkboxValue" />
-                            <label for="checkOption3">New York</label>
-                        </div>
-                    </div>
-                </div>
-
-                <h5>Input Switch</h5>
-                <InputSwitch v-model="switchValue" />
-            </div>
-
-            <div class="card">
-                <h5>Listbox</h5>
-                <Listbox v-model="listboxValue" :options="listboxValues" optionLabel="name" :filter="true" />
-
-                <h5>Dropdown</h5>
-                <Dropdown v-model="dropdownValue" :options="dropdownValues" optionLabel="name" placeholder="Select" />
-
-                <h5>MultiSelect</h5>
-                <MultiSelect v-model="multiselectValue" :options="multiselectValues" optionLabel="name" placeholder="Select Countries" :filter="true">
-                    <template #value="slotProps">
-                        <div class="inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" v-for="option of slotProps.value" :key="option.code">
-                            <span :class="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px; height: 12px" />
-                            <div>{{ option.name }}</div>
-                        </div>
-                        <template v-if="!slotProps.value || slotProps.value.length === 0">
-                            <div class="p-1">Select Countries</div>
-                        </template>
-                    </template>
-                    <template #option="slotProps">
-                        <div class="flex align-items-center">
-                            <span :class="'mr-2 flag flag-' + slotProps.option.code.toLowerCase()" style="width: 18px; height: 12px" />
-                            <div>{{ slotProps.option.name }}</div>
-                        </div>
-                    </template>
-                </MultiSelect>
-
-                <h5>TreeSelect</h5>
-                <TreeSelect v-model="selectedNode" :options="treeSelectNodes" placeholder="Select Item"></TreeSelect>
-            </div>
-
-            <div class="card">
-                <h5>ToggleButton</h5>
-                <ToggleButton v-model="toggleValue" onLabel="Yes" offLabel="No" :style="{ width: '10em' }" />
-
-                <h5>SelectButton</h5>
-                <SelectButton v-model="selectButtonValue1" :options="selectButtonValues1" optionLabel="name" />
-
-                <h5>SelectButton - Multiple</h5>
-                <SelectButton v-model="selectButtonValue2" :options="selectButtonValues2" optionLabel="name" :multiple="true" />
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card">
-                <h5>Input Groups</h5>
-                <div class="grid p-fluid">
-                    <div class="col-12 md:col-6">
-                        <div class="p-inputgroup">
-                            <span class="p-inputgroup-addon">
-                                <i class="pi pi-user"></i>
-                            </span>
-                            <InputText placeholder="Username" />
-                        </div>
-                    </div>
-
-                    <div class="col-12 md:col-6">
-                        <div class="p-inputgroup">
-                            <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>
-                            <span class="p-inputgroup-addon"><i class="pi pi-globe"></i></span>
-                            <InputText placeholder="Price" />
-                            <span class="p-inputgroup-addon">$</span>
-                            <span class="p-inputgroup-addon">.00</span>
-                        </div>
-                    </div>
-
-                    <div class="col-12 md:col-6">
-                        <div class="p-inputgroup">
-                            <Button label="Search" />
-                            <InputText placeholder="Keyword" />
-                        </div>
-                    </div>
-
-                    <div class="col-12 md:col-6">
-                        <div class="p-inputgroup">
-                            <span class="p-inputgroup-addon p-inputgroup-addon-checkbox">
-                                <Checkbox v-model="inputGroupValue" :binary="true" />
-                            </span>
-                            <InputText placeholder="Confirm" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
