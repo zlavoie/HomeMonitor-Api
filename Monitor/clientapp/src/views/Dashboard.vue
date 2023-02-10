@@ -125,33 +125,9 @@ watch(
                 <span class="text-500">since last week</span>
             </div>
         </div>
-
-        <div class="col-12 xl:col-6">
-            <div class="card">
-                <h5>Registered Items</h5>
-                <DataTable :value="products" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column style="width: 15%">
-                        <template #header> Image </template>
-                        <template #body="slotProps">
-                            <img :src="contextPath + 'demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" width="50" class="shadow-2" />
-                        </template>
-                    </Column>
-                    <Column field="name" header="Name" :sortable="true" style="width: 35%"></Column>
-                    <Column field="price" header="Price" :sortable="true" style="width: 35%">
-                        <template #body="slotProps">
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template>
-                    </Column>
-                    <Column style="width: 15%">
-                        <template #header> View </template>
-                        <template #body>
-                            <Button icon="pi pi-search" type="button" class="p-button-text"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-            </div>
-        </div>
-        <div class="col-12 xl:col-6">
+    </div>
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-3">
             <div class="card">
                 <div class="flex align-items-center justify-content-between mb-4">
                     <h5>Notifications</h5>
@@ -201,6 +177,33 @@ watch(
                         </span>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card">
+                <h5>Registered Items</h5>
+                <DataTable :value="products" :rows="5" :paginator="true" responsiveLayout="scroll">
+                    <Column style="width: 15%">
+                        <template #header> Image </template>
+                        <template #body="slotProps">
+                            <img :src="contextPath + 'demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" width="50" class="shadow-2" />
+                        </template>
+                    </Column>
+                    <Column field="name" header="Name" :sortable="true" style="width: 35%"></Column>
+                    <Column field="price" header="Price" :sortable="true" style="width: 35%">
+                        <template #body="slotProps">
+                            {{ formatCurrency(slotProps.data.price) }}
+                        </template>
+                    </Column>
+                    <Column style="width: 15%">
+                        <template #header> View </template>
+                        <template #body>
+                            <Button icon="pi pi-search" type="button" class="p-button-text"></Button>
+                        </template>
+                    </Column>
+                </DataTable>
             </div>
         </div>
     </div>
